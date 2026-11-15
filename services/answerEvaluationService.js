@@ -102,7 +102,22 @@ const evaluateAnswer = async (question, answer, category, difficulty) => {
     let score = keywordScore + lengthScore + structureScore + relevanceScore;
 
     score = Math.min(10, Math.max(0, Math.round(score)));
+    // Reject irrelevant and meaningless answers
+    const meaningfulWords = words.filter(
+      (word) => word.length > 2 && !stopWords.includes(word),
+    );
 
+    if (
+      wordCount < 5 ||
+      meaningfulWords.length < 3 ||
+      matchedKeywords.length === 0
+    ) {
+      return {
+        score: 0,
+        feedback:
+          "Your answer is not relevant to the question. Please explain the correct concept and try again.",
+      };
+    }
     // Generate feedback
     let feedback = "";
 
