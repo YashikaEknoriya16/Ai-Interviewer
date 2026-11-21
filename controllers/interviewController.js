@@ -149,20 +149,6 @@ const submitAnswer = async (req, res) => {
       question.category,
       question.difficulty,
     );
-
-    // Reject low-scoring answers without saving
-    if (evaluation.score <= 4) {
-      return res.status(200).json({
-        message: "Answer rejected. Please try again.",
-        accepted: false,
-        result: {
-          question: question.question,
-          score: evaluation.score,
-          feedback: evaluation.feedback,
-        },
-        interviewStatus: interview.status,
-      });
-    }
     // Save answer, score and feedback
     question.answer = answer.trim();
     question.score = evaluation.score;
